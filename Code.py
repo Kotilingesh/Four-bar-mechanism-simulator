@@ -20,7 +20,7 @@ while phi<2*pi:
     k=link1.axis-link4.axis
     try:
         theta=acos((mag(k)**2+l3**2-l2**2)/(2*mag(k)*l3))
-    except ValueError:
+    except ValueError or ZeroDivisionError:
         theta=nan
     angle=-atan(k.y/k.x)
     link3.pos=link4.axis
