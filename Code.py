@@ -9,11 +9,10 @@ link4=arrow(pos=vector(0,0,0),axis=vector(l4,0,0),shaftwidth=0.5)
 k=l1-l4
 try:
     theta=acos((k**2+l3**2-l2**2)/(2*k*l3))
-except ValueError:
+except ValueError or ZeroDivisionError:
     theta=nan
 link3=arrow(pos=link4.axis,axis=vector(l3,l3,0),shaftwidth=0.5)
 link2=arrow(pos=link3.pos+link3.axis,axis=link1.axis-link4.axis-link3.axis,shaftwidth=0.5)
-print(mag(link2.axis),theta*180/pi)
 phi=0
 while phi<2*pi:
     phi=phi+pi/20
@@ -28,11 +27,8 @@ while phi<2*pi:
     link3.axis=vector(l3*cos(theta-angle),l3*sin(theta-angle),0)
     link2.pos=link3.pos+link3.axis
     link2.axis=link1.axis-link4.axis-link3.axis
-    print(mag(link2.axis))
     sleep(0.05)
     if isnan(theta)!=1:
-        print(theta)
-        print(phi)
         break
     sleep(0.05)
 i=1
@@ -44,9 +40,10 @@ while True:
         theta=acos((mag(k)**2+l3**2-l2**2)/(2*mag(k)*l3))
     except ValueError:
         theta=nan   
-        i=-i
-        print('I am in') 
+        i=-i 
         continue
+     except ZeroDivisionError:
+        theta=0
     try:
         angle=-atan(k.y/k.x)
     except ZeroDivisionError:
@@ -57,5 +54,4 @@ while True:
     link3.axis=vector(l3*cos(theta*i-angle),l3*sin(theta*i-angle),0)
     link2.pos=link3.pos+link3.axis
     link2.axis=link1.axis-link4.axis-link3.axis
-    print(mag(link2.axis))
     sleep(0.01)
